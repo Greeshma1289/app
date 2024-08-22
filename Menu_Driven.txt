@@ -1,0 +1,147 @@
+#include<stdio.h>
+#include<stdlib.h>
+int main()
+{
+int c=0;
+char  add [100],name[100], w[100],command[100];
+while(c!=12)
+{
+printf("1:CPU INFORMATION\n2:MEMORY INFORMATION\n3:Ethernet Test\n4:Network connectivity\n5:SD CARD\n6:USB\n7:EMMC TEST\n8:RTC TEST\n9:I2C TEST\n10:I2C EEPROM TEST\n11:WATCHDOG\n12:Exit\n---------------------\nEnter the choice:");
+scanf("%d",&c);
+switch(c)
+{
+case 1:
+printf("CPU INFORMATION\n----------------------------\n");
+system("cat /proc/cpuinfo");
+break;
+case 2:
+printf("MEMORY INFORMATION\n--------------------------\n");
+system("cat /proc/meminfo");
+break;
+case 3:
+printf("Ethernet test\n-------------\n");
+system("ifconfig");
+break;
+case 4:
+printf("Network connectivity\n-------------------------\n");
+
+printf("Enter the address:");
+scanf("%s",add);
+sprintf(command,"ping -c 4 %s",add);
+system(command);
+break;
+case 5:
+printf("SD CARD\n----------------\n");
+
+ system("mount /dev/mmcblk0p1 /media/sdcard");
+printf("Enter the file name:");
+scanf("%s",name);
+sprintf(command,"cp %s /media/sdcard/",name);
+system(command);
+system(" ls /media/sdcard");
+printf("Enter anything you want to write:");
+scanf("%s",w);
+sprintf(command,"echo %s >> /media/sdcard/%s",w,name);
+system(command);
+sprintf(command,"cat /media/sdcard/%s",name);
+system(command);
+printf("\n-------------------\n");
+system("umount /dev/mmcblk0p1");
+break;
+case 6:
+printf("USB\n-------------------\n");
+system("ls /media/usb");
+system("mount /dev/sda1 /media/usb");
+printf("Enter the name of the file to copy:");
+scanf("%s",name);
+sprintf(command,"cp %s /media/usb",name);
+system(command);
+printf("Enter anything you want to write:");
+scanf("%s",w);
+sprintf(command,"echo %s >> /media/usb/%s",w,name);
+system(command);
+sprintf(command,"cat /media/usb/%s",name);
+system(command);
+printf("\n----------------------------\n");
+system("umount /dev/mmcblk0p1");
+break;
+case 7:
+printf("EMMC TEST\n------------\n");
+system("mount /dev/mmcblk2p1 /media/emmc");
+printf("Enter the name of the file to copy:");
+scanf("%s",name);
+sprintf(command,"cp %s /media/emmc",name);
+system(command);
+printf("Enter anything you want to write:");
+scanf("%s",w);
+sprintf(command,"echo %s >> /media/emmc/%s",w,name);
+system(command);
+
+sprintf(command,"cat /media/emmc/%s",name);
+system(command);
+printf("\n-------------------\n");
+system("umount /dev/mmcblk2p1 ");
+break;
+case 8:
+printf("RTC TEST\n----------------------\n");
+ char date[100];
+int q=0;
+printf("1.to set  time\n 2: check time\nEnter choice:");
+scanf("%d",&q);
+switch(q)
+{
+    case 1:
+    system("timedatectl set-ntp false");
+    printf("Enter Date and Time in YYYY-MM-DDHH:MM  format:\n");
+    scanf("%s",date);
+    sprintf(command,"timedatectl set-time '%s' ",date);
+    system(command);
+ system("hwclock -w");
+ system("hwclock -r");
+printf("\n------------------------------------\n");
+    break;
+case 2:
+ system("hwclock -w");
+
+      system("hwclock -r");
+printf("\n---------------------------------\n");
+    break;
+}
+break;
+case 9:
+printf("I2C TEST\n----------------\n");
+    system("sudo i2cdetect -y 1");
+break;
+case 10:
+printf("I2C EEPROM TEST\n---------------\n");
+char s[100];
+int w=0;
+printf("\n1:Write EEPROM\n2:Read EEPROM\nEnter choice\n----------------\n");
+scanf("%d",&w);
+
+switch(w)
+{
+case 1:
+printf("\n\n Enter anything: \n");
+scanf("%s",s);
+system("echo %s > /sys/bus/i2c/devices/1-0057/eeprom");
+
+case 2:
+sprintf(command,"echo %s > /sys/bus/i2c/devices/1-0057/eeprom",s);
+system(command);
+system("cat /sys/bus/i2c/devices/1-0057/eeprom");
+printf("\n");
+}
+break;
+case 11:
+printf("WATCHDOG\n---------\n");
+
+    system("sudo shutdown -r now");
+break;
+case 12:
+printf("Exit\n------\n");
+}	
+}
+}
+                                                            
+                                                                                                                                                                                                                           124,1         
